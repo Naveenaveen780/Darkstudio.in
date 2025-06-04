@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dark Studio</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    /* Spinner Loader */
+    #spinner {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #spinner::after {
+      content: "";
+      width: 40px;
+      height: 40px;
+      border: 5px solid #444;
+      border-top-color: #0cf;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #111;
+      color: #fff;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      position: relative;
+      z-index: 0;
+    }
+
+    /* Floating Background Camera Icons */
+    .icon-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .icon-bg i {
+      position: absolute;
+      color: rgba(255, 255, 255, 0.06);
+      animation: floatUp linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      50% { opacity: 0.6; }
+      100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Back to Top */
+    .back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #0cf;
+      color: #000;
+      padding: 10px 14px;
+      border-radius: 50%;
+      font-size: 20px;
+      text-decoration: none;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      cursor: pointer;
+    }
+
+    .hero-slider {
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  animation: slideShow 24s infinite;
+}
+
+.hero-slider .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5); /* dark overlay */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  padding: 20px;
+  z-index: 1;
+}
+
+@keyframes slideShow {
+  0% { background-image: url('./13425.jpg'); }
+  10% { background-image: url('./pic/IMG_0057.PNG'); }
+  20% { background-image: url('./pic/IMG_2857.JPG'); }
+  30% { background-image: url('./pic/IMG_2852.JPG'); }
+  40% { background-image: url('./1Z8A8087.jpg'); }
+  50% { background-image: url('./1Z8A8638.jpg'); }
+  60% { background-image: url('./IMG_0056.JPG'); }
+  70% { background-image: url('./1Z8A8087.jpg'); }
+  80% { background-image: url('./IMG_2854.JPG'); }
+  100% { background-image: url('./IMG_0061.PNG'); }
+}
+
+
+    header p {
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+      animation: fadeSlideIn 1.4s ease-out forwards;
+      opacity: 0;
+    }
+
+    header a {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #0cf;
+      color: #000;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 30px;
+      transition: background 0.3s;
+      opacity: 0;
+      transform: scale(0.8);
+      animation: scaleIn 1.8s ease forwards;
+    }
+
+    header a:hover {
+      background: #09a9e0;
+    }
+
+    /* Animations */
+    @keyframes popIn {
+      0% {
+        transform: translateY(-30px) scale(0.9);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeSlideIn {
+      0% {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes scaleIn {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    section {
+      padding: 60px 20px;
+      max-width: 1000px;
+      margin: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      text-align: center;
+    }
+
+    .portfolio img {
+      width: 100%;
+      border-radius: 10px;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+
+    .portfolio img:hover {
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #000;
+      z-index: 1;
+      position: relative;
+    }
+
+    .contact-form {
+      margin-top: 30px;
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      background: #333;
+      color: #fff;
+      resize: vertical;
+    }
+
+    .contact-form button {
+      background: #0cf;
+      border: none;
+      padding: 10px 20px;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .contact-form button:hover {
+      background: #09c;
+    }
+
+    .qr-code {
+      text-align: center;
+      margin-top: 30px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .qr-code img {
+      max-width: 250px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Breadcrumb Floating Circles */
+    .breadcrumb-animation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .breadcrumb-animation li {
+      position: absolute;
+      display: block;
+      list-style: none;
+      width: 20px;
+      height: 20px;
+      background: rgba(0, 204, 255, 0.1);
+      animation: animate 20s linear infinite;
+      bottom: -150px;
+      border-radius: 50%;
+    }
+    .service-link {
+  text-decoration: none;
+  color: #0cf;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.service-link div {
+  text-align: center;
+}
+
+.service-link:hover,
+.service-link:focus {
+  color: #09c;
+}
+
+.service-link i {
+  transition: transform 0.3s ease;
+}
+
+.service-link:hover i,
+.service-link:focus i {
+  transform: scale(1.2) rotate(15deg);
+}
+
+.service-link h3 {
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+
+    .breadcrumb-animation li:nth-child(1) { left: 25%; width: 80px; height: 80px; }
+    .breadcrumb-animation li:nth-child(2) { left: 10%; animation-delay: 2s; animation-duration: 12s; }
+    .breadcrumb-animation li:nth-child(3) { left: 70%; animation-delay: 4s; }
+    .breadcrumb-animation li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-duration: 18s; }
+    .breadcrumb-animation li:nth-child(5) { left: 65%; }
+    .breadcrumb-animation li:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
+
+    @keyframes animate {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Spinner -->
+  <div id="spinner"></div>
+
+  <!-- Background Camera Icons -->
+  <div class="icon-bg" id="iconBackground"></div>
+
+  <!-- Breadcrumb floating animation -->
+  <ul class="breadcrumb-animation">
+    <li></li><li></li><li></li><li></li><li></li><li></li>
+  </ul>
+
+  <header class="hero-slider">
+  <div class="overlay">
+    <h1>Dark Studio</h1>
+    <p>Photography</p>
+    <p>Creative Visuals & Storytelling</p>
+    <a href="#contact">Contact Us</a>
+  </div>
+</header>
+
+  <section data-aos="fade-up">
+    <h2>About Us</h2>
+    <p>Dark Studio specializes in visual storytelling through photography and video. We craft creative content for individuals and brands alike.</p>
+  </section>
+
+  <section class="services" data-aos="fade-up">
+    <h2>Our Services</h2>
+   <div class="grid">
+  <a href="./photo.html" class="service-link">
+    <div>
+      <i class="fas fa-camera-retro fa-2x"></i>
+      <h3>Photography</h3>
+    </div>
+  </a>
+  <a href="videography.html" class="service-link">
+    <div>
+      <i class="fas fa-video fa-2x"></i>
+      <h3>Videography</h3>
+    </div>
+  </a>
+  <a href="creative-editing.html" class="service-link">
+    <div>
+      <i class="fas fa-paint-brush fa-2x"></i>
+      <h3>Creative Editing</h3>
+    </div>
+  </a>
+  <a href="social-media.html" class="service-link">
+    <div>
+      <i class="fas fa-share-alt fa-2x"></i>
+      <h3>Social Media</h3>
+    </div>
+  </a>
+</div>
+
+  </section>
+
+  <section class="portfolio" data-aos="fade-up">
+    <h2>Our Work</h2>
+    <div class="grid">
+      <img src="./pic/IMG_0051.JPG" alt="Portfolio 1" loading="lazy" />
+      <img src="./pic/IMG_0052.JPG" alt="Portfolio 2" loading="lazy" />
+      <img src="./pic/IMG_0053.JPG" alt="Portfolio 3" loading="lazy" />
+      <img src="./pic/IMG_0054.JPG" alt="Portfolio 5" loading="lazy" />
+      <img src="./pic/IMG_0056.JPG" alt="Portfolio 6" loading="lazy" />
+      <img src="./pic/IMG_0057.PNG" alt="Portfolio 7" loading="lazy" />
+      <img src="./pic/IMG_0058.PNG" alt="Portfolio 8" loading="lazy" />
+      <img src="./pic/IMG_0059.PNG" alt="Portfolio 9" loading="lazy" />
+      <img src="./pic/IMG_0060.PNG" alt="Portfolio 10" loading="lazy" />
+      <img src="./pic/IMG_0061.PNG" alt="Portfolio 11" loading="lazy" />
+      <img src="./pic/IMG_0063.PNG" alt="Portfolio 12" loading="lazy" />
+      <img src="./pic/IMG_0064.PNG" alt="Portfolio 4" loading="lazy" />
+      <img src="./pic/IMG_0065.PNG" alt="Portfolio 5" loading="lazy" />
+      <img src="./pic/IMG_0066.PNG" alt="Portfolio 6" loading="lazy" />
+      <img src="./pic/IMG_0067.PNG" alt="Portfolio 7" loading="lazy" />
+      <img src="./pic/IMG_0068.PNG" alt="Portfolio 8" loading="lazy" />
+      <img src="./pic/IMG_0069.PNG" alt="Portfolio 9" loading="lazy" />
+      <img src="./pic/IMG_2851.JPG" alt="Portfolio 10" loading="lazy" />
+      <img src="./pic/IMG_2852.JPG" alt="Portfolio 11" loading="lazy" />
+      <img src="./pic/IMG_2854.JPG" alt="Portfolio 12" loading="lazy" />
+      <img src="./pic/IMG_2857.JPG" alt="Portfolio 4" loading="lazy" />
+      <img src="./pic/IMG_6848.JPG" alt="Portfolio 5" loading="lazy" />
+      <img src="./pic/IMG_6850.JPG" alt="Portfolio 6" loading="lazy" />
+      <img src="./pic/IMG_6850.JPG" alt="Portfolio 7" loading="lazy" />
+      <img src="./pic/IMG_6853.JPG" alt="Portfolio 8" loading="lazy" />
+      <img src="./pic/IMG_6855.JPG" alt="Portfolio 9" loading="lazy" />
+      <img src="./pic/IMG_6857.JPG" alt="Portfolio 10" loading="lazy" />
+      <img src="./New folder/IMG_0057.PNG" alt="Portfolio 12" loading="lazy" />
+      <img src="./New folder/IMG_0067.PNG" alt="Portfolio 11" loading="lazy" />
+      <img src="./New folder/IMG_2852.JPG" alt="Portfolio 12" loading="lazy" />
+      
+      <img src="./New folder/IMG_2857.JPG" alt="Portfolio 12" loading="lazy" />
+    </div>
+  </section>
+
+  <section id="contact" class="contact" data-aos="fade-up">
+    <h2>Contact Us</h2>
+    <p><i class="fas fa-phone"></i> 6381479122</p>
+    <p><i class="fab fa-instagram"></i>
+      <a href="https://instagram.com/dark_studio26" style="color:#0cf;">@dark_studio26</a>
+    </p>
+    <p><i class="fas fa-envelope"></i>
+      <a href="mailto:naveenaveen780@gmail.com" style="color:#0cf;">naveenaveen780@gmail.com</a>
+    </p>
+
+    <div class="contact-form">
+      <form onsubmit="sendToWhatsApp(); return false;">
+        <input type="text" id="name" placeholder="Your Name" required />
+        <input type="tel" id="phone" placeholder="Your Mobile Number" required />
+        <textarea id="message" rows="4" placeholder="Your Message" required></textarea>
+        <button type="submit"><i class="fab fa-whatsapp"></i> Send via WhatsApp</button>
+      </form>
+    </div>
+
+    <div class="qr-code">
+      <h3>Scan to Follow Us on Instagram</h3>
+      <img src="./Qr code.jpeg" alt="Instagram QR Code" />
+    </div>
+
+    <div class="addthis_inline_share_toolbox"></div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Dark Studio. All rights reserved.</p>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <a href="#" class="back-to-top" id="backToTop">↑</a>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>AOS.init();</script>
+  <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5f1c3d9cf7e80a6d"></script>
+
+  <script>
+    // Spinner removal
+    window.addEventListener('load', () => {
+      document.getElementById('spinner').style.display = 'none';
+    });
+
+    // WhatsApp send
+    function sendToWhatsApp() {
+      const name = document.getElementById("name").value.trim();
+      const userPhone = document.getElementById("phone").value.trim();
+      const message = document.getElementById("message").value.trim();
+      const recipientNumber = "916381479122";
+      const text = `Hi, I am ${name}.%0APhone: ${userPhone}%0AMessage: ${message}`;
+      const url = `https://wa.me/${recipientNumber}?text=${text}`;
+      window.open(url, '_blank');
+    }
+
+    // Floating camera icons
+    const iconContainer = document.getElementById("iconBackground");
+    for (let i = 0; i < 40; i++) {
+      const icon = document.createElement("i");
+      icon.className = "fas fa-camera-retro";
+      icon.style.left = Math.random() * 100 + "vw";
+      icon.style.top = Math.random() * 100 + "vh";
+      icon.style.fontSize = (10 + Math.random() * 30) + "px";
+      icon.style.animationDuration = (5 + Math.random() * 10) + "s";
+      icon.style.animationDelay = (Math.random() * 20) + "s";
+      iconContainer.appendChild(icon);
+    }
+
+    // Back to top button
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      backToTop.style.display = window.scrollY > 300 ? 'flex' : 'none';
+    });
+  </script>
+
+</body>
+</html>
